@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   ZyraFiles design tokens
+   Todos los colores de la app salen de aquí (formato "R G B"
+   para poder usar opacidad en Tailwind: bg-primary/20).
+   ============================================================ */
+:root {
+  /* LIGHT — diseñado aparte, no invertido */
+  --primary: 124 58 237;            /* violeta 600 */
+  --primary-hover: 109 40 217;
+  --primary-soft: 237 233 254;
+  --primary-deep: 76 29 149;
+  --primary-glow: 139 92 246;
+  --primary-fg: 255 255 255;
+
+  --background: 250 249 252;        /* blanco con tinte violeta */
+  --background-secondary: 243 241 248;
+  --card: 255 255 255;
+  --card-hover: 252 251 255;
+
+  --text: 16 14 24;
+  --text-secondary: 71 67 88;
+  --text-muted: 122 117 140;
+
+  --border: 229 226 238;
+  --border-hover: 205 198 226;
+
+  --success: 22 163 74;
+  --danger: 220 38 38;
+  --warning: 217 119 6;
+
+  --shadow-card: 0 1px 2px rgb(20 10 40 / 0.04), 0 8px 24px -12px rgb(40 20 80 / 0.12);
+  --shadow-pop: 0 24px 64px -16px rgb(40 20 80 / 0.28), 0 2px 6px rgb(20 10 40 / 0.06);
+  --grid-line: 16 14 24;
+  --grid-alpha: 0.045;
+  --glass: 255 255 255;
+  --glass-alpha: 0.72;
+
+  color-scheme: light;
+}
+
+.dark {
+  /* DARK — tema principal: negro ligeramente azulado + violeta */
+  --primary: 157 110 255;
+  --primary-hover: 177 140 255;
+  --primary-soft: 38 26 66;
+  --primary-deep: 91 33 182;
+  --primary-glow: 139 92 246;
+  --primary-fg: 255 255 255;
+
+  --background: 7 7 11;
+  --background-secondary: 12 12 18;
+  --card: 16 15 23;
+  --card-hover: 21 20 30;
+
+  --text: 244 243 250;
+  --text-secondary: 172 168 190;
+  --text-muted: 116 112 134;
+
+  --border: 36 34 48;
+  --border-hover: 60 54 84;
+
+  --success: 74 222 128;
+  --danger: 248 113 113;
+  --warning: 251 191 36;
+
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 12px 32px -16px rgb(0 0 0 / 0.7);
+  --shadow-pop: 0 30px 80px -20px rgb(0 0 0 / 0.85), 0 0 0 1px rgb(255 255 255 / 0.04);
+  --grid-line: 255 255 255;
+  --grid-alpha: 0.035;
+  --glass: 14 13 20;
+  --glass-alpha: 0.66;
+
+  color-scheme: dark;
+}
+
+@layer base {
+  html,
+  body {
+    @apply bg-bg text-fg font-sans antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  html.theme-anim,
+  html.theme-anim *,
+  html.theme-anim *::before,
+  html.theme-anim *::after {
+    transition: background-color 0.45s ease, border-color 0.45s ease, color 0.35s ease, fill 0.35s ease !important;
+  }
+  body {
+    overflow-x: hidden;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  ::selection {
+    background: rgb(var(--primary) / 0.3);
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--primary));
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--border-hover)) transparent;
+  }
+}
+
+@layer components {
+  /* Jerarquía tipográfica */
+  .h1 { @apply font-display font-extrabold tracking-[-0.035em] leading-[1.02]; }
+  .h2 { @apply font-display font-bold tracking-[-0.03em] leading-[1.1]; }
+  .h3 { @apply font-display font-semibold tracking-[-0.015em]; }
+  .label { @apply text-[11px] font-semibold uppercase tracking-[0.12em] text-fg-muted; }
+  .meta { @apply font-mono text-[12px] text-fg-muted tabular-nums; }
+
+  .text-gradient {
+    background-image: linear-gradient(100deg, rgb(var(--primary-hover)) 0%, rgb(var(--primary)) 45%, #e9d5ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  :root:not(.dark) .text-gradient {
+    background-image: linear-gradient(100deg, #5b21b6 0%, #7c3aed 50%, #a855f7 100%);
+  }
+
+  .glass {
+    background: rgb(var(--glass) / var(--glass-alpha));
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+  }
+
+  .surface {
+    @apply bg-card border border-line rounded-2xl shadow-card;
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(rgb(var(--grid-line) / var(--grid-alpha)) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--grid-line) / var(--grid-alpha)) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .ring-glow {
+    box-shadow: 0 0 0 1px rgb(var(--primary) / 0.45), 0 0 0 4px rgb(var(--primary) / 0.12);
+  }
+
+  .collapse-grid {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .collapse-grid[data-open="true"] {
+    grid-template-rows: 1fr;
+  }
+  .collapse-grid > * {
+    overflow: hidden;
+    min-height: 0;
+  }
+}
+
+/* Reducir animaciones: preferencia del SO o ajuste del usuario */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html.reduce-motion *,
+html.reduce-motion *::before,
+html.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
